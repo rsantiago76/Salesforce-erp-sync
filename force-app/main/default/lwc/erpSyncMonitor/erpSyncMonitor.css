@@ -1,0 +1,30 @@
+.stat-tile {
+    background: #f3f3f3;
+    border-radius: 6px;
+    padding: 1rem;
+    text-align: center;
+    border-left: 3px solid #00A1E0;
+}
+
+.stat-tile.success {
+    border-left-color: #1D9E75;
+}
+
+.stat-tile.failed {
+    border-left-color: #c23934;
+}
+
+.stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: #032D60;
+    margin: 0;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0;
+}

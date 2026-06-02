@@ -1,0 +1,90 @@
+<template>
+    <lightning-card title="ERP Sync Monitor" icon-name="standard:data_integration_hub">
+        <div class="slds-p-around_medium">
+
+            <!-- Stats -->
+            <template if:true={stats}>
+                <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                    <div class="slds-col">
+                        <div class="stat-tile success">
+                            <p class="stat-num">{stats.totalSuccess}</p>
+                            <p class="stat-label">Successful Syncs</p>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="stat-tile failed">
+                            <p class="stat-num">{stats.totalFailed}</p>
+                            <p class="stat-label">Failed Syncs</p>
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="stat-tile">
+                            <p class="stat-num">{stats.totalToday}</p>
+                            <p class="stat-label">Synced Today</p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Actions -->
+            <div class="slds-m-bottom_medium">
+                <lightning-button label="Refresh" icon-name="utility:refresh" onclick={handleRefresh}
+                    class="slds-m-right_small">
+                </lightning-button>
+            </div>
+
+            <!-- Loading -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Sync Log Table -->
+            <template if:true={logs}>
+                <template if:true={hasLogs}>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                            <tr>
+                                <th>Log #</th>
+                                <th>Order ID</th>
+                                <th>Status</th>
+                                <th>Error Message</th>
+                                <th>Synced At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={logs} for:item="log">
+                                <tr key={log.Id}>
+                                    <td>{log.Name}</td>
+                                    <td>{log.OrderId__c}</td>
+                                    <td>
+                                        <span class={log.statusClass}>{log.Status__c}</span>
+                                    </td>
+                                    <td>{log.ErrorMessage__c}</td>
+                                    <td>{log.syncedAt}</td>
+                                    <td>
+                                        <template if:true={log.isFailed}>
+                                            <lightning-button label="Retry" variant="brand" data-id={log.OrderId__c}
+                                                onclick={handleRetry}>
+                                            </lightning-button>
+                                        </template>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </template>
+                <template if:false={hasLogs}>
+                    <p class="slds-text-color_success slds-m-top_medium">
+                        ✓ No sync logs yet — trigger an Order sync to see results here.
+                    </p>
+                </template>
+            </template>
+
+            <template if:true={error}>
+                <p class="slds-text-color_error">{error}</p>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>
